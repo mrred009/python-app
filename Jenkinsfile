@@ -21,5 +21,22 @@ pipeline {
                 sh 'docker build -t python-app .'
             }
         }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                docker save python-app > app.tar
+
+                scp -o StrictHostKeyChecking=no app.tar ubuntu@172.31.43.191:/home/ubuntu/
+
+                ssh -o StrictHostKeyChecking=no ubuntu@172.31.43.191 "
+                    docker load < app.tar
+                    docker stop python-app || true
+                    docker rm python-app || true
+                    docker run -d --name python-app python-app
+                "
+                '''
+            }
+        }
     }
 }
