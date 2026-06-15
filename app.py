@@ -4,6 +4,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Hello from Jenkins CI/CD"
+    return "Hello from Jenkins Second Pipeline runs successfully"
 
 app.run(host="0.0.0.0", port=5000)
+
